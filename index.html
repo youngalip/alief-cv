@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alief Fathur Rahman — Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0b0e13;
+      --surface: #111620;
+      --surface2: #171d2b;
+      --border: rgba(255,255,255,0.07);
+      --accent: #4af0b0;
+      --accent2: #3b82f6;
+      --text: #e8eaf0;
+      --muted: #7a8298;
+      --tag-bg: rgba(74,240,176,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* Grid lines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Glow blobs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; }
+    .blob-2 { width: 500px; height: 500px; background: var(--accent2); bottom: -150px; right: -100px; }
+
+    /* ─── LAYOUT ─── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 32px 120px;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      padding: 80px 0 60px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    .header-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(48px, 8vw, 80px);
+      line-height: 0.95;
+      letter-spacing: -2px;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .header-tagline {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .contact-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .contact-pill:hover { border-color: var(--accent); color: var(--accent); }
+    .contact-pill svg { flex-shrink: 0; }
+
+    /* ─── DIVIDER ─── */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 60px 0 32px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── CARDS ─── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+      transition: border-color 0.25s, transform 0.25s;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .card:hover {
+      border-color: rgba(74,240,176,0.25);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .card-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 4px 10px;
+      background: var(--surface2);
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .card-body {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ─── PROJECTS ─── */
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+      transition: all 0.25s;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(74,240,176,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .project-card:hover {
+      border-color: rgba(74,240,176,0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .project-number {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 48px;
+      color: rgba(74,240,176,0.1);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .project-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .project-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .feature-item::before {
+      content: '→';
+      color: var(--accent);
+      font-family: 'DM Mono', monospace;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ─── TAGS ─── */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      background: var(--tag-bg);
+      border: 1px solid rgba(74,240,176,0.15);
+      border-radius: 6px;
+      color: var(--accent);
+    }
+
+    .tag.blue {
+      background: rgba(59,130,246,0.08);
+      border-color: rgba(59,130,246,0.2);
+      color: #7eb8ff;
+    }
+
+    /* ─── SKILLS GRID ─── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .skill-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .skill-block:hover { border-color: rgba(74,240,176,0.2); }
+
+    .skill-block-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .skill-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .skill-item {
+      font-size: 13px;
+      color: var(--text);
+      padding: 5px 12px;
+      background: var(--surface2);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    /* ─── ORG ITEMS ─── */
+    .org-role {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+
+    .org-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .org-role-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .org-role-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      margin-top: 80px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: gap;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .footer-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--text);
+    }
+
+    .footer-note {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* stagger delays */
+    header                { animation-delay: 0.1s; }
+    .section-divider:nth-of-type(1) { animation-delay: 0.2s; }
+    .card:nth-child(1)    { animation-delay: 0.25s; }
+    .card:nth-child(2)    { animation-delay: 0.35s; }
+    .card:nth-child(3)    { animation-delay: 0.45s; }
+    .project-card:nth-child(1) { animation-delay: 0.3s; }
+    .project-card:nth-child(2) { animation-delay: 0.45s; }
+    .skill-block:nth-child(1) { animation-delay: 0.2s; }
+    .skill-block:nth-child(2) { animation-delay: 0.3s; }
+    .skill-block:nth-child(3) { animation-delay: 0.4s; }
+    .skill-block:nth-child(4) { animation-delay: 0.5s; }
+    footer { animation-delay: 0.5s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      .wrapper { padding: 40px 20px 80px; }
+      .card { padding: 20px; }
+      .project-card { padding: 20px; }
+      h1 { letter-spacing: -1px; }
+      .contact-row { gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<div class="wrapper">
+
+  <!-- ═══ HEADER ═══ -->
+  <header>
+    <div class="header-eyebrow">Portfolio · Curriculum Vitae</div>
+    <h1>Alief Fathur<br><em>Rahman</em></h1>
+    <p class="header-tagline">
+      Mahasiswa Teknik Informatika semester 8 di ITERA dengan fokus pada
+      <strong style="color:var(--text); font-weight:500">Web Development</strong> (React + Laravel)
+      dan <strong style="color:var(--text); font-weight:500">Machine Learning</strong>.
+      Passionate dalam membangun sistem yang scalable dan berdampak nyata.
+    </p>
+    <div class="contact-row">
+      <a class="contact-pill" href="tel:082175478422">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+        082175478422
+      </a>
+      <a class="contact-pill" href="mailto:alieffathur123@gmail.com">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        alieffathur123@gmail.com
+      </a>
+      <a class="contact-pill" href="https://www.linkedin.com/in/alief-fathur-rahman-a095762a4/" target="_blank">
+        <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <span class="contact-pill">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Bandar Lampung, Lampung
+      </span>
+    </div>
+  </header>
+
+  <!-- ═══ PROJECTS ═══ -->
+  <div class="section-divider">
+    <span class="section-label">Featured Projects</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="project-card">
+    <div class="project-number">01</div>
+    <div class="project-name">Sistem POS Cafe</div>
+    <div class="card-subtitle" style="margin-bottom:12px">Point of Sale · Full-Stack Application</div>
+    <p class="project-desc">
+      Aplikasi kasir berbasis web untuk manajemen operasional cafe secara real-time — dari pencatatan transaksi hingga laporan penjualan. Dibangun dengan arsitektur terpisah antara frontend dan backend untuk skalabilitas maksimal.
+    </p>
+    <div class="feature-list">
+      <div class="feature-item">Sistem autentikasi dan manajemen role (admin, kasir, owner)</div>
+      <div class="feature-item">Integrasi payment gateway untuk berbagai metode pembayaran</div>
+      <div class="feature-item">Manajemen menu, stok, dan laporan penjualan harian/bulanan</div>
+      <div class="feature-item">Dashboard analitik penjualan berbasis data real-time</div>
+    </div>
+    <div class="tags">
+      <span class="tag">React.js</span>
+      <span class="tag">Laravel</span>
+      <span class="tag">REST API</span>
+      <span class="tag">Payment Gateway</span>
+      <span class="tag blue">MySQL</span>
+      <span class="tag blue">Tailwind CSS</span>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <div class="project-number">02</div>
+    <div class="project-name">Sistem Booking Ruangan Corporate</div>
+    <div class="card-subtitle" style="margin-bottom:12px">Room Reservation System · Enterprise Solution</div>
+    <p class="project-desc">
+      Platform reservasi ruangan terintegrasi untuk lingkungan korporat, mendukung dua mode akses pengguna: publik via Google OAuth dan internal karyawan via SSO perusahaan. Dirancang untuk efisiensi, transparansi jadwal, dan notifikasi otomatis.
+    </p>
+    <div class="feature-list">
+      <div class="feature-item">Google OAuth 2.0 untuk login pengguna umum (eksternal)</div>
+      <div class="feature-item">Integrasi SSO Corporate untuk autentikasi karyawan internal</div>
+      <div class="feature-item">Notifikasi email otomatis — konfirmasi booking, pengingat, dan pembatalan</div>
+      <div class="feature-item">Dashboard manajemen ruangan, jadwal, dan riwayat reservasi</div>
+      <div class="feature-item">Sistem approval bertingkat untuk ruangan dengan kapasitas khusus</div>
+    </div>
+    <div class="tags">
+      <span class="tag">React.js</span>
+      <span class="tag">Laravel</span>
+      <span class="tag">Google OAuth 2.0</span>
+      <span class="tag">SSO</span>
+      <span class="tag">Auto Email</span>
+      <span class="tag blue">MySQL</span>
+      <span class="tag blue">REST API</span>
+    </div>
+  </div>
+
+  <!-- ═══ EXPERIENCE ═══ -->
+  <div class="section-divider">
+    <span class="section-label">Pengalaman Kerja</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Freelancer — Web Development & ML</div>
+        <div class="card-subtitle">Work From Home · Pegawai Kontrak</div>
+      </div>
+      <div class="card-date">Feb 2024 – Feb 2025</div>
+    </div>
+    <p class="card-body">
+      Mengerjakan berbagai proyek freelance meliputi pembuatan website dengan React dan Laravel, perancangan diagram UML untuk dokumentasi sistem, serta pengembangan model machine learning sederhana untuk kebutuhan klien. Mengelola komunikasi klien, estimasi waktu, dan delivery secara mandiri.
+    </p>
+  </div>
+
+  <!-- ═══ EDUCATION ═══ -->
+  <div class="section-divider">
+    <span class="section-label">Pendidikan</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Institut Teknologi Sumatera (ITERA)</div>
+        <div class="card-subtitle">S1 Teknik Informatika · semester 8</div>
+      </div>
+      <div class="card-date">2022 – Sekarang</div>
+    </div>
+    <p class="card-body">
+      Berfokus pada pengembangan perangkat lunak, algoritma, dan kecerdasan buatan. Aktif berkontribusi dalam himpunan mahasiswa dan berbagai proyek teknis selama masa perkuliahan.
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">SMA Al-Kautsar Bandar Lampung</div>
+        <div class="card-subtitle">IPA (Ilmu Pengetahuan Alam)</div>
+      </div>
+      <div class="card-date">2020 – 2022</div>
+    </div>
+  </div>
+
+  <!-- ═══ ORGANIZATION ═══ -->
+  <div class="section-divider">
+    <span class="section-label">Organisasi</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">HMIF ITERA</div>
+        <div class="card-subtitle">Himpunan Mahasiswa Teknik Informatika</div>
+      </div>
+    </div>
+
+    <div class="org-role">
+      <div class="org-dot"></div>
+      <div>
+        <div class="org-role-title">Kepala Divisi Harmonisasi <span style="color:var(--muted); font-weight:300; font-size:12px">&nbsp;· 2025 – Sekarang</span></div>
+        <div class="org-role-desc">Bertanggung jawab atas seluruh program kerja divisi, menjalankan tugas lintas fungsi, serta menjadi mediator pencegahan potensi konflik di dalam himpunan.</div>
+      </div>
+    </div>
+
+    <div class="org-role">
+      <div class="org-dot" style="background:var(--muted)"></div>
+      <div>
+        <div class="org-role-title">Staff Seni & Olahraga <span style="color:var(--muted); font-weight:300; font-size:12px">&nbsp;· 2023 – 2024</span></div>
+        <div class="org-role-desc">Mengelola program kerja divisi seni dan olahraga dalam lingkup himpunan mahasiswa.</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border)">
+      <div class="section-label" style="margin-bottom: 14px; display: block">Event Leadership</div>
+      <div class="org-role">
+        <div class="org-dot"></div>
+        <div>
+          <div class="org-role-title">Ketua Pelaksana — Hijau Bergelora</div>
+          <div class="org-role-desc">Merancang dan melaksanakan acara peringatan Hari Kemerdekaan Indonesia.</div>
+        </div>
+      </div>
+      <div class="org-role">
+        <div class="org-dot"></div>
+        <div>
+          <div class="org-role-title">Wakil Ketua — Primera Fest & Tech Game Fest</div>
+          <div class="org-role-desc">Perencanaan dan pelaksanaan pameran game Teknik Informatika serta festival musik dan budaya.</div>
+        </div>
+      </div>
+      <div class="org-role" style="margin-bottom:0">
+        <div class="org-dot"></div>
+        <div>
+          <div class="org-role-title">Kepala Divisi Acara — Cybernite</div>
+          <div class="org-role-desc">Pengonsepan dan pelaksanaan perlombaan Mobile Legends dan biliar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SKILLS ═══ -->
+  <div class="section-divider">
+    <span class="section-label">Skills</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-block">
+      <div class="skill-block-title">Frontend</div>
+      <div class="skill-items">
+        <span class="skill-item">React.js</span>
+        <span class="skill-item">JavaScript</span>
+        <span class="skill-item">HTML/CSS</span>
+        <span class="skill-item">Tailwind CSS</span>
+      </div>
+    </div>
+    <div class="skill-block">
+      <div class="skill-block-title">Backend</div>
+      <div class="skill-items">
+        <span class="skill-item">Laravel</span>
+        <span class="skill-item">PHP</span>
+        <span class="skill-item">REST API</span>
+        <span class="skill-item">OAuth 2.0</span>
+        <span class="skill-item">SSO</span>
+      </div>
+    </div>
+    <div class="skill-block">
+      <div class="skill-block-title">Data & ML</div>
+      <div class="skill-items">
+        <span class="skill-item">Machine Learning</span>
+        <span class="skill-item">Python</span>
+        <span class="skill-item">MySQL</span>
+        <span class="skill-item">UML</span>
+      </div>
+    </div>
+    <div class="skill-block">
+      <div class="skill-block-title">Tools & Soft Skills</div>
+      <div class="skill-items">
+        <span class="skill-item">Figma</span>
+        <span class="skill-item">VS Code</span>
+        <span class="skill-item">Leadership</span>
+        <span class="skill-item">Team Mgmt</span>
+        <span class="skill-item">Problem Solving</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-name">Alief Fathur Rahman</div>
+    <div class="footer-note">Open to opportunities · 2025</div>
+  </footer>
+
+</div>
+
+<script>
+  // Intersection Observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.card, .project-card, .skill-block, .section-divider, footer').forEach(el => {
+    el.style.animationPlayState = 'paused';
+    observer.observe(el);
+  });
+
+  // Subtle mouse parallax on blobs
+  document.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 30;
+    const y = (e.clientY / window.innerHeight - 0.5) * 30;
+    document.querySelector('.blob-1').style.transform = `translate(${x}px, ${y}px)`;
+    document.querySelector('.blob-2').style.transform = `translate(${-x}px, ${-y}px)`;
+  });
+</script>
+
+</body>
+</html>
