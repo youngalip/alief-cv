@@ -1,716 +1,867 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Alief Fathur Rahman — Developer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alief Fathur Rahman | Fullstack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg: #0b0e13;
-      --surface: #111620;
-      --surface2: #171d2b;
-      --border: rgba(255,255,255,0.07);
-      --accent: #4af0b0;
-      --accent2: #3b82f6;
-      --text: #e8eaf0;
-      --muted: #7a8298;
-      --tag-bg: rgba(74,240,176,0.08);
-    }
+  :root {
+    --desk: #E4E0D0;
+    --paper: #F5F2E7;
+    --paper-deep: #ECE7D6;
+    --ink: #1C2733;
+    --ink-soft: #59626D;
+    --blue: #21548C;
+    --blue-soft: rgba(33,84,140,0.09);
+    --blue-line: rgba(33,84,140,0.22);
+    --red: #A93226;
+    --line: rgba(28,39,51,0.16);
+  }
 
-    html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Outfit', sans-serif;
-      font-weight: 300;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+  body {
+    background: var(--desk);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
 
-    /* Noise texture overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
-    }
+  ::selection { background: var(--blue); color: var(--paper); }
 
-    /* Grid lines */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-      z-index: 0;
-    }
+  a { color: var(--blue); }
 
-    /* Glow blobs */
-    .blob {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.12;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .blob-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; }
-    .blob-2 { width: 500px; height: 500px; background: var(--accent2); bottom: -150px; right: -100px; }
+  /* ─── SHEET ─── */
+  .sheet-outer {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 28px 16px 60px;
+  }
 
-    /* ─── LAYOUT ─── */
-    .wrapper {
-      position: relative;
-      z-index: 1;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 60px 32px 120px;
-    }
+  .sheet {
+    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    background-image:
+      linear-gradient(var(--blue-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blue-soft) 1px, transparent 1px);
+    background-size: 26px 26px;
+    padding: 48px clamp(24px, 6vw, 64px) 0;
+  }
 
-    /* ─── HEADER ─── */
-    header {
-      padding: 80px 0 60px;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeUp 0.8s ease forwards;
-    }
+  .sheet::before {
+    content: '';
+    position: absolute;
+    inset: 10px;
+    border: 1px solid var(--line);
+    pointer-events: none;
+  }
 
-    .header-eyebrow {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      color: var(--accent);
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
+  .crop {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+  }
+  .crop::before, .crop::after {
+    content: '';
+    position: absolute;
+    background: var(--ink);
+  }
+  .crop::before { width: 100%; height: 1px; }
+  .crop::after { width: 1px; height: 100%; }
+  .crop.tl { top: -1px; left: -1px; }
+  .crop.tr { top: -1px; right: -1px; }
+  .crop.bl { bottom: -1px; left: -1px; }
+  .crop.br { bottom: -1px; right: -1px; }
+  .crop.tr::before, .crop.br::before { right: 0; }
+  .crop.tr::after, .crop.tr::before,
+  .crop.br::after { }
+  .crop.tr::after { right: 0; }
+  .crop.br::after { right: 0; }
+  .crop.bl::before, .crop.br::before { bottom: 0; }
+  .crop.bl::after, .crop.br::after { }
+  .crop.bl::after { bottom: 0; }
+  .crop.br::after { bottom: 0; }
 
-    h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(48px, 8vw, 80px);
-      line-height: 0.95;
-      letter-spacing: -2px;
-      color: var(--text);
-      margin-bottom: 20px;
-    }
+  /* ─── HERO ─── */
+  header {
+    position: relative;
+    padding: 8px 0 44px;
+  }
 
-    h1 em {
-      font-style: italic;
-      color: var(--accent);
-    }
+  .sheet-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.03em;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 36px;
+  }
 
-    .header-tagline {
-      font-size: 15px;
-      color: var(--muted);
-      max-width: 520px;
-      line-height: 1.7;
-      margin-bottom: 32px;
-    }
+  .hero-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
 
-    .contact-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+  h1 {
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: clamp(38px, 6.2vw, 60px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    max-width: 12ch;
+  }
 
-    .contact-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-    .contact-pill:hover { border-color: var(--accent); color: var(--accent); }
-    .contact-pill svg { flex-shrink: 0; }
+  .role-line {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--blue);
+    margin-top: 14px;
+    letter-spacing: 0.02em;
+  }
 
-    /* ─── DIVIDER ─── */
-    .section-divider {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin: 60px 0 32px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards;
-    }
+  .header-tagline {
+    font-size: 15px;
+    color: var(--ink-soft);
+    max-width: 54ch;
+    line-height: 1.75;
+    margin-top: 18px;
+  }
 
-    .section-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--muted);
-      white-space: nowrap;
-    }
+  /* stamp */
+  .stamp {
+    flex-shrink: 0;
+    width: 108px;
+    height: 108px;
+    border: 2px solid var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--red);
+    transform: rotate(-9deg);
+    font-family: 'IBM Plex Mono', monospace;
+    position: relative;
+    opacity: 0;
+    animation: stampIn 0.5s 0.5s cubic-bezier(.2,1.4,.4,1) forwards;
+  }
+  .stamp::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid var(--red);
+    border-radius: 50%;
+  }
+  .stamp-text {
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+  }
+  .stamp-text small { display: block; font-size: 9px; opacity: 0.85; letter-spacing: 0.1em; }
 
-    .divider-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
+  @keyframes stampIn {
+    0% { opacity: 0; transform: rotate(-9deg) scale(1.6); }
+    70% { opacity: 1; }
+    100% { opacity: 1; transform: rotate(-9deg) scale(1); }
+  }
 
-    /* ─── CARDS ─── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px 32px;
-      margin-bottom: 16px;
-      transition: border-color 0.25s, transform 0.25s;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards;
-    }
-    .card:hover {
-      border-color: rgba(74,240,176,0.25);
-      transform: translateY(-2px);
-    }
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 26px;
+  }
 
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
+  .contact-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-pill:hover { border-color: var(--blue); color: var(--blue); }
+  .contact-pill svg { flex-shrink: 0; }
+  .contact-pill.accent { border-color: var(--blue-line); color: var(--blue); }
 
-    .card-title {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text);
-    }
+  /* ─── SECTION DIVIDER (dimension line) ─── */
+  .dim {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 56px 0 28px;
+  }
+  .dim-tick {
+    width: 1px;
+    height: 14px;
+    background: var(--ink-soft);
+  }
+  .dim-line { flex: 1; height: 1px; background: var(--line); }
+  .dim-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .dim-index {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+  }
 
-    .card-subtitle {
-      font-size: 13px;
-      color: var(--accent);
-      font-weight: 400;
-      margin-top: 2px;
-    }
+  /* ─── SYSTEMS / PROJECTS ─── */
+  .systems-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
 
-    .card-date {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      padding: 4px 10px;
-      background: var(--surface2);
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      white-space: nowrap;
-    }
+  .module {
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 26px 28px;
+    transition: border-color 0.2s;
+  }
+  .module:hover { border-color: var(--blue-line); }
 
-    .card-body {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.75;
-    }
+  .connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+  }
+  .connector::after {
+    content: '';
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid var(--blue);
+    opacity: 0;
+    transform: scale(0.6);
+    animation: arrowIn 0.35s ease forwards;
+  }
+  @keyframes arrowIn { to { opacity: 1; transform: scale(1); } }
 
-    /* ─── PROJECTS ─── */
-    .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px 32px;
-      margin-bottom: 16px;
-      transition: all 0.25s;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards;
-      position: relative;
-      overflow: hidden;
-    }
-    .project-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(74,240,176,0.03) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .project-card:hover {
-      border-color: rgba(74,240,176,0.3);
-      transform: translateY(-3px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    }
+  .module-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
 
-    .project-number {
-      font-family: 'DM Serif Display', serif;
-      font-style: italic;
-      font-size: 48px;
-      color: rgba(74,240,176,0.1);
-      line-height: 1;
-      margin-bottom: 12px;
-    }
+  .module-id {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--blue);
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+    display: block;
+  }
 
-    .project-name {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
+  .module-name {
+    font-family: 'Newsreader', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+  }
 
-    .project-desc {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.75;
-      margin-bottom: 20px;
-    }
+  .module-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--red);
+    border: 1px solid var(--red);
+    border-radius: 3px;
+    padding: 2px 7px;
+    white-space: nowrap;
+    height: fit-content;
+  }
 
-    .feature-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 20px;
-    }
+  .module-subtitle {
+    font-size: 13px;
+    color: var(--blue);
+    margin-bottom: 14px;
+  }
 
-    .feature-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 13px;
-      color: var(--muted);
-    }
+  .module-desc {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.75;
+    margin-bottom: 18px;
+    max-width: 68ch;
+  }
 
-    .feature-item::before {
-      content: '→';
-      color: var(--accent);
-      font-family: 'DM Mono', monospace;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
+  .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 20px;
+  }
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .feature-item::before {
+    content: '-';
+    color: var(--blue);
+    flex-shrink: 0;
+  }
 
-    /* ─── TAGS ─── */
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    padding: 4px 9px;
+    background: var(--paper);
+    border: 1px solid var(--blue-line);
+    border-radius: 3px;
+    color: var(--blue);
+  }
 
-    .tag {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      padding: 4px 10px;
-      background: var(--tag-bg);
-      border: 1px solid rgba(74,240,176,0.15);
-      border-radius: 6px;
-      color: var(--accent);
-    }
+  /* ─── GENERIC CARD (experience / education) ─── */
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 22px 26px;
+    margin-bottom: 14px;
+    background: var(--paper-deep);
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-family: 'Newsreader', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .card-subtitle {
+    font-size: 12.5px;
+    color: var(--blue);
+    margin-top: 3px;
+  }
+  .card-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    padding: 3px 9px;
+    background: var(--paper);
+    border-radius: 3px;
+    border: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  .card-body {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.75;
+    max-width: 68ch;
+  }
 
-    .tag.blue {
-      background: rgba(59,130,246,0.08);
-      border-color: rgba(59,130,246,0.2);
-      color: #7eb8ff;
-    }
+  /* ─── ORG ─── */
+  .org-role {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 18px;
+    align-items: flex-start;
+  }
+  .org-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--blue);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+  .org-dot.muted { background: var(--ink-soft); opacity: 0.5; }
+  .org-role-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .org-role-title span {
+    color: var(--ink-soft);
+    font-weight: 300;
+    font-size: 12px;
+  }
+  .org-role-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    max-width: 62ch;
+  }
+  .org-subhead {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin: 20px 0 14px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
 
-    /* ─── SKILLS GRID ─── */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-    }
+  /* ─── LEGEND (skills) ─── */
+  .legend {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .legend-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+  }
+  .legend-row:not(:last-child) { border-bottom: 1px solid var(--line); }
+  .legend-key {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 18px;
+    background: var(--paper-deep);
+    border-right: 1px solid var(--line);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink);
+  }
+  .legend-symbol {
+    width: 11px;
+    height: 11px;
+    flex-shrink: 0;
+    border: 1.4px solid var(--blue);
+  }
+  .legend-symbol.circle { border-radius: 50%; }
+  .legend-symbol.diamond { transform: rotate(45deg); }
+  .legend-symbol.tri {
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 11px solid var(--blue);
+    border-top: none;
+  }
+  .legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    gap: 7px;
+    padding: 14px 18px;
+  }
+  .legend-item {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    padding: 4px 10px;
+    background: var(--paper);
+    border-radius: 3px;
+    border: 1px solid var(--line);
+  }
 
-    .skill-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      transition: border-color 0.2s;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards;
-    }
-    .skill-block:hover { border-color: rgba(74,240,176,0.2); }
+  @media (max-width: 640px) {
+    .legend-row { grid-template-columns: 1fr; }
+    .legend-key { border-right: none; border-bottom: 1px solid var(--line); }
+  }
 
-    .skill-block-title {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 14px;
-    }
+  /* ─── TITLE BLOCK (footer) ─── */
+  .titleblock {
+    margin-top: 56px;
+    border-top: 2px solid var(--ink);
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  }
+  .tb-cell {
+    padding: 16px 18px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .tb-cell:last-child { border-right: none; }
+  .tb-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .tb-value {
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .tb-value a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+  .tb-value a:hover { color: var(--blue); text-decoration-color: var(--blue); }
 
-    .skill-items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+  .sheet-footer-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    text-align: center;
+    padding: 16px 0 28px;
+  }
 
-    .skill-item {
-      font-size: 13px;
-      color: var(--text);
-      padding: 5px 12px;
-      background: var(--surface2);
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
+  @media (max-width: 640px) {
+    .titleblock { grid-template-columns: 1fr 1fr; }
+  }
 
-    /* ─── ORG ITEMS ─── */
-    .org-role {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 20px;
-      align-items: flex-start;
-    }
+  @media (prefers-reduced-motion: reduce) {
+    .stamp, .connector::after { animation: none !important; opacity: 1 !important; transform: none !important; }
+  }
 
-    .org-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin-top: 6px;
-    }
-
-    .org-role-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .org-role-desc {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    /* ─── FOOTER ─── */
-    footer {
-      margin-top: 80px;
-      padding-top: 32px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: gap;
-      gap: 12px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease forwards;
-    }
-
-    .footer-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: 20px;
-      color: var(--text);
-    }
-
-    .footer-note {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    /* ─── ANIMATIONS ─── */
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* stagger delays */
-    header                { animation-delay: 0.1s; }
-    .section-divider:nth-of-type(1) { animation-delay: 0.2s; }
-    .card:nth-child(1)    { animation-delay: 0.25s; }
-    .card:nth-child(2)    { animation-delay: 0.35s; }
-    .card:nth-child(3)    { animation-delay: 0.45s; }
-    .project-card:nth-child(1) { animation-delay: 0.3s; }
-    .project-card:nth-child(2) { animation-delay: 0.45s; }
-    .skill-block:nth-child(1) { animation-delay: 0.2s; }
-    .skill-block:nth-child(2) { animation-delay: 0.3s; }
-    .skill-block:nth-child(3) { animation-delay: 0.4s; }
-    .skill-block:nth-child(4) { animation-delay: 0.5s; }
-    footer { animation-delay: 0.5s; }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 600px) {
-      .wrapper { padding: 40px 20px 80px; }
-      .card { padding: 20px; }
-      .project-card { padding: 20px; }
-      h1 { letter-spacing: -1px; }
-      .contact-row { gap: 6px; }
-    }
-  </style>
+  @media (max-width: 600px) {
+    .sheet { padding: 40px 20px 0; }
+    .hero-row { flex-direction: column-reverse; align-items: flex-start; }
+    .module { padding: 20px; }
+  }
+</style>
 </head>
 <body>
 
-<div class="blob blob-1"></div>
-<div class="blob blob-2"></div>
+<div class="sheet-outer">
+  <div class="sheet">
+    <span class="crop tl"></span><span class="crop tr"></span><span class="crop bl"></span><span class="crop br"></span>
 
-<div class="wrapper">
-
-  <!-- ═══ HEADER ═══ -->
-  <header>
-    <div class="header-eyebrow">Portfolio · Curriculum Vitae</div>
-    <h1>Alief Fathur<br><em>Rahman</em></h1>
-    <p class="header-tagline">
-      Mahasiswa Teknik Informatika semester 8 di ITERA dengan fokus pada
-      <strong style="color:var(--text); font-weight:500">Web Development</strong> (React + Laravel)
-      dan <strong style="color:var(--text); font-weight:500">Machine Learning</strong>.
-      Passionate dalam membangun sistem yang scalable dan berdampak nyata.
-    </p>
-    <div class="contact-row">
-      <a class="contact-pill" href="tel:082175478422">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
-        082175478422
-      </a>
-      <a class="contact-pill" href="mailto:alieffathur123@gmail.com">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        alieffathur123@gmail.com
-      </a>
-      <a class="contact-pill" href="https://www.linkedin.com/in/alief-fathur-rahman-a095762a4/" target="_blank">
-        <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-        LinkedIn
-      </a>
-      <span class="contact-pill">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Bandar Lampung, Lampung
-      </span>
-    </div>
-  </header>
-
-  <!-- ═══ PROJECTS ═══ -->
-  <div class="section-divider">
-    <span class="section-label">Featured Projects</span>
-    <div class="divider-line"></div>
-  </div>
-
-  <div class="project-card">
-    <div class="project-number">01</div>
-    <div class="project-name">Sistem POS Cafe</div>
-    <div class="card-subtitle" style="margin-bottom:12px">Point of Sale · Full-Stack Application</div>
-    <p class="project-desc">
-      Aplikasi kasir berbasis web untuk manajemen operasional cafe secara real-time — dari pencatatan transaksi hingga laporan penjualan. Dibangun dengan arsitektur terpisah antara frontend dan backend untuk skalabilitas maksimal.
-    </p>
-    <div class="feature-list">
-      <div class="feature-item">Sistem autentikasi dan manajemen role (admin, kasir, owner)</div>
-      <div class="feature-item">Integrasi payment gateway untuk berbagai metode pembayaran</div>
-      <div class="feature-item">Manajemen menu, stok, dan laporan penjualan harian/bulanan</div>
-      <div class="feature-item">Dashboard analitik penjualan berbasis data real-time</div>
-    </div>
-    <div class="tags">
-      <span class="tag">React.js</span>
-      <span class="tag">Laravel</span>
-      <span class="tag">REST API</span>
-      <span class="tag">Payment Gateway</span>
-      <span class="tag blue">MySQL</span>
-      <span class="tag blue">Tailwind CSS</span>
-    </div>
-  </div>
-
-  <div class="project-card">
-    <div class="project-number">02</div>
-    <div class="project-name">Sistem Booking Ruangan Corporate</div>
-    <div class="card-subtitle" style="margin-bottom:12px">Room Reservation System · Enterprise Solution</div>
-    <p class="project-desc">
-      Platform reservasi ruangan terintegrasi untuk lingkungan korporat, mendukung dua mode akses pengguna: publik via Google OAuth dan internal karyawan via SSO perusahaan. Dirancang untuk efisiensi, transparansi jadwal, dan notifikasi otomatis.
-    </p>
-    <div class="feature-list">
-      <div class="feature-item">Google OAuth 2.0 untuk login pengguna umum (eksternal)</div>
-      <div class="feature-item">Integrasi SSO Corporate untuk autentikasi karyawan internal</div>
-      <div class="feature-item">Notifikasi email otomatis — konfirmasi booking, pengingat, dan pembatalan</div>
-      <div class="feature-item">Dashboard manajemen ruangan, jadwal, dan riwayat reservasi</div>
-      <div class="feature-item">Sistem approval bertingkat untuk ruangan dengan kapasitas khusus</div>
-    </div>
-    <div class="tags">
-      <span class="tag">React.js</span>
-      <span class="tag">Laravel</span>
-      <span class="tag">Google OAuth 2.0</span>
-      <span class="tag">SSO</span>
-      <span class="tag">Auto Email</span>
-      <span class="tag blue">MySQL</span>
-      <span class="tag blue">REST API</span>
-    </div>
-  </div>
-
-  <!-- ═══ EXPERIENCE ═══ -->
-  <div class="section-divider">
-    <span class="section-label">Pengalaman Kerja</span>
-    <div class="divider-line"></div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <div class="card-title">Freelancer — Web Development & ML</div>
+    <header>
+      <div class="sheet-meta">
+        <span>PORTFOLIO · CURRICULUM VITAE</span>
+        <span>SHEET 1/1 · REV 2026</span>
       </div>
-      <div class="card-date">Feb 2024 – Feb 2025</div>
-    </div>
-    <p class="card-body">
-      Mengerjakan berbagai proyek freelance meliputi pembuatan website dengan React dan Laravel, perancangan diagram UML untuk dokumentasi sistem, serta pengembangan model machine learning sederhana untuk kebutuhan klien. Mengelola komunikasi klien, estimasi waktu, dan delivery secara mandiri.
-    </p>
-  </div>
 
-  <!-- ═══ EDUCATION ═══ -->
-  <div class="section-divider">
-    <span class="section-label">Pendidikan</span>
-    <div class="divider-line"></div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <div class="card-title">Institut Teknologi Sumatera (ITERA)</div>
-        <div class="card-subtitle">S1 Teknik Informatika · semester 8</div>
+      <div class="hero-row">
+        <div>
+          <h1>Alief Fathur Rahman</h1>
+          <div class="role-line">fullstack developer / deep learning &amp; ai enthusiast</div>
+          <p class="header-tagline">
+            Fresh graduate Teknik Informatika dengan fokus pada pengembangan web full-stack (React.js + Laravel), serta ketertarikan pada deep learning dan Artificial Intelligence. Terbiasa membangun sistem dari perancangan database hingga antarmuka yang siap dipakai pengguna.
+          </p>
+        </div>
+        <div class="stamp">
+          <div class="stamp-text">LULUS<br><small>ITERA · 2026</small></div>
+        </div>
       </div>
-      <div class="card-date">2022 – Sekarang</div>
-    </div>
-    <p class="card-body">
-      Berfokus pada pengembangan perangkat lunak, algoritma, dan kecerdasan buatan. Aktif berkontribusi dalam himpunan mahasiswa dan berbagai proyek teknis selama masa perkuliahan.
-    </p>
-  </div>
 
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <div class="card-title">SMA Al-Kautsar Bandar Lampung</div>
-        <div class="card-subtitle">IPA (Ilmu Pengetahuan Alam)</div>
+      <div class="contact-row">
+        <a class="contact-pill" href="tel:082175478422">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+          082175478422
+        </a>
+        <a class="contact-pill" href="mailto:alieffathur123@gmail.com">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          alieffathur123@gmail.com
+        </a>
+        <a class="contact-pill accent" href="https://www.linkedin.com/in/alief-fathur-rahman-/" target="_blank">
+          <svg width="11" height="11" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <span class="contact-pill">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Bandar Lampung · terbuka relokasi
+        </span>
       </div>
-      <div class="card-date">2020 – 2022</div>
+    </header>
+
+    <!-- ═══ SYSTEMS BUILT ═══ -->
+    <div class="dim">
+      <span class="dim-tick"></span>
+      <span class="dim-label">Systems built</span>
+      <span class="dim-line"></span>
+      <span class="dim-index">03 unit</span>
     </div>
-  </div>
 
-  <!-- ═══ ORGANIZATION ═══ -->
-  <div class="section-divider">
-    <span class="section-label">Organisasi</span>
-    <div class="divider-line"></div>
-  </div>
+    <div class="systems-flow">
 
-  <div class="card">
-    <div class="card-header">
-      <div>
-        <div class="card-title">HMIF ITERA</div>
-        <div class="card-subtitle">Himpunan Mahasiswa Teknik Informatika</div>
+      <div class="module">
+        <div class="module-head">
+          <div>
+            <span class="module-id">SYS-01</span>
+            <div class="module-name">Savor Bakery</div>
+          </div>
+          <span class="module-badge">PM + Developer</span>
+        </div>
+        <div class="module-subtitle">Point of Sale &amp; Self-Order System</div>
+        <p class="module-desc">
+          Memimpin proyek sekaligus turun langsung membangun sistem kasir dan self-order untuk Savor Bakery, dari requirement gathering hingga delivery. Arsitektur frontend-backend terpisah untuk mendukung skalabilitas operasional toko.
+        </p>
+        <div class="feature-list">
+          <div class="feature-item">Self-order berbasis QR code di meja, tanpa perlu antre ke kasir</div>
+          <div class="feature-item">Autentikasi multi-role: pelanggan, admin, kasir, owner</div>
+          <div class="feature-item">Integrasi payment gateway dan manajemen stok real-time</div>
+          <div class="feature-item">Dashboard analitik penjualan harian/bulanan</div>
+        </div>
+        <div class="tags">
+          <span class="tag">React.js</span>
+          <span class="tag">Laravel</span>
+          <span class="tag">REST API</span>
+          <span class="tag">Payment Gateway</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">Tailwind CSS</span>
+        </div>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="module">
+        <div class="module-head">
+          <div>
+            <span class="module-id">SYS-02</span>
+            <div class="module-name">SIPAR (BPSDM Kementerian PU)</div>
+          </div>
+          <span class="module-badge">Internship</span>
+        </div>
+        <div class="module-subtitle">Room Reservation Platform</div>
+        <p class="module-desc">
+          Platform reservasi ruangan untuk lingkungan korporat, mendukung dua alur autentikasi: publik via Google OAuth dan pegawai internal via SSO Kementerian PU (OAuth2 authorization code flow, berbasis NIP).
+        </p>
+        <div class="feature-list">
+          <div class="feature-item">Login ganda: Google OAuth 2.0 (eksternal) &amp; SSO instansi (internal)</div>
+          <div class="feature-item">Approval berbasis role (user, admin unit, superadmin) dengan dashboard statistik</div>
+          <div class="feature-item">Notifikasi email otomatis untuk booking baru dan perubahan status</div>
+          <div class="feature-item">Generate dokumen resmi "Surat Peminjaman Ruangan" (PDF) dengan tanda tangan digital</div>
+        </div>
+        <div class="tags">
+          <span class="tag">React.js</span>
+          <span class="tag">Laravel Sanctum</span>
+          <span class="tag">Google OAuth 2.0</span>
+          <span class="tag">SSO / OAuth2</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">Dompdf</span>
+        </div>
+      </div>
+
+      <div class="connector"></div>
+
+      <div class="module">
+        <div class="module-head">
+          <div>
+            <span class="module-id">SYS-03</span>
+            <div class="module-name">Sistem Perencanaan Proyek Konstruksi</div>
+          </div>
+          <span class="module-badge">Desktop App</span>
+        </div>
+        <div class="module-subtitle">Tauri Desktop Webview</div>
+        <p class="module-desc">
+          Aplikasi desktop untuk perusahaan kontraktor konstruksi, menggabungkan frontend web dengan performa native lewat Tauri, sehingga lebih ringan dibanding framework berbasis Electron.
+        </p>
+        <div class="feature-list">
+          <div class="feature-item">Mengintegrasikan BOM/RAB, purchase order, dan delivery dalam satu alur data</div>
+          <div class="feature-item">Menggantikan pencatatan manual yang sebelumnya tersebar di Excel &amp; WhatsApp</div>
+          <div class="feature-item">Local database SQLite untuk penyimpanan data pada aplikasi desktop</div>
+        </div>
+        <div class="tags">
+          <span class="tag">Tauri</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">React.js</span>
+          <span class="tag">Rust</span>
+          <span class="tag">SQLite</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══ EXPERIENCE ═══ -->
+    <div class="dim">
+      <span class="dim-tick"></span>
+      <span class="dim-label">Work experience</span>
+      <span class="dim-line"></span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Freelancer / Fullstack Web Developer</div>
+        </div>
+        <div class="card-date">Feb 2024 – Sekarang</div>
+      </div>
+      <p class="card-body">
+        Mengerjakan proyek freelance secara end-to-end: pengembangan aplikasi web dengan React.js dan Laravel, perancangan diagram UML untuk dokumentasi sistem, serta eksplorasi model machine learning sesuai kebutuhan klien. Mengelola komunikasi klien, estimasi waktu, dan delivery secara mandiri.
+      </p>
+    </div>
+
+    <!-- ═══ EDUCATION ═══ -->
+    <div class="dim">
+      <span class="dim-tick"></span>
+      <span class="dim-label">Education</span>
+      <span class="dim-line"></span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Institut Teknologi Sumatera (ITERA)</div>
+          <div class="card-subtitle">S1 Teknik Informatika · Lulus 2026 · GPA 3.49</div>
+        </div>
+        <div class="card-date">2022 – 2026</div>
+      </div>
+      <p class="card-body">
+        Berfokus pada pengembangan perangkat lunak, algoritma, dan kecerdasan buatan. Tugas akhir mengenai klasifikasi citra menggunakan arsitektur CNN dan Vision Transformer. Aktif berkontribusi dalam himpunan mahasiswa dan berbagai proyek teknis selama masa perkuliahan.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">SMA Al-Kautsar Bandar Lampung</div>
+          <div class="card-subtitle">IPA (Ilmu Pengetahuan Alam)</div>
+        </div>
+        <div class="card-date">2020 – 2022</div>
       </div>
     </div>
 
-    <div class="org-role">
-      <div class="org-dot"></div>
-      <div>
-        <div class="org-role-title">Kepala Divisi Harmonisasi <span style="color:var(--muted); font-weight:300; font-size:12px">&nbsp;· 2025 – Sekarang</span></div>
-        <div class="org-role-desc">Bertanggung jawab atas seluruh program kerja divisi, menjalankan tugas lintas fungsi, serta menjadi mediator pencegahan potensi konflik di dalam himpunan.</div>
-      </div>
+    <!-- ═══ ORGANIZATION ═══ -->
+    <div class="dim">
+      <span class="dim-tick"></span>
+      <span class="dim-label">Organization</span>
+      <span class="dim-line"></span>
     </div>
 
-    <div class="org-role">
-      <div class="org-dot" style="background:var(--muted)"></div>
-      <div>
-        <div class="org-role-title">Staff Seni & Olahraga <span style="color:var(--muted); font-weight:300; font-size:12px">&nbsp;· 2023 – 2024</span></div>
-        <div class="org-role-desc">Mengelola program kerja divisi seni dan olahraga dalam lingkup himpunan mahasiswa.</div>
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">HMIF ITERA</div>
+          <div class="card-subtitle">Himpunan Mahasiswa Teknik Informatika</div>
+        </div>
       </div>
-    </div>
 
-    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border)">
-      <div class="section-label" style="margin-bottom: 14px; display: block">Event Leadership</div>
       <div class="org-role">
         <div class="org-dot"></div>
         <div>
-          <div class="org-role-title">Ketua Pelaksana — Hijau Bergelora</div>
+          <div class="org-role-title">Head of Harmonization <span>· 2025 – 2026</span></div>
+          <div class="org-role-desc">Bertanggung jawab atas seluruh program kerja divisi, menjalankan tugas lintas fungsi, serta menjadi mediator pencegahan potensi konflik di dalam himpunan.</div>
+        </div>
+      </div>
+
+      <div class="org-role" style="margin-bottom:0">
+        <div class="org-dot muted"></div>
+        <div>
+          <div class="org-role-title">Arts &amp; Sports Division Staff <span>· 2023 – 2024</span></div>
+          <div class="org-role-desc">Mengelola program kerja divisi seni dan olahraga dalam lingkup himpunan mahasiswa.</div>
+        </div>
+      </div>
+
+      <div class="org-subhead">Event Committees</div>
+
+      <div class="org-role">
+        <div class="org-dot"></div>
+        <div>
+          <div class="org-role-title">Event Chair: Hijau Bergelora</div>
           <div class="org-role-desc">Merancang dan melaksanakan acara peringatan Hari Kemerdekaan Indonesia.</div>
         </div>
       </div>
       <div class="org-role">
         <div class="org-dot"></div>
         <div>
-          <div class="org-role-title">Wakil Ketua — Primera Fest & Tech Game Fest</div>
+          <div class="org-role-title">Vice Chair: Primera Fest &amp; Tech Game Fest</div>
           <div class="org-role-desc">Perencanaan dan pelaksanaan pameran game Teknik Informatika serta festival musik dan budaya.</div>
         </div>
       </div>
       <div class="org-role" style="margin-bottom:0">
         <div class="org-dot"></div>
         <div>
-          <div class="org-role-title">Kepala Divisi Acara — Cybernite</div>
+          <div class="org-role-title">Head of Event Division: Cybernite</div>
           <div class="org-role-desc">Pengonsepan dan pelaksanaan perlombaan Mobile Legends dan biliar.</div>
         </div>
       </div>
     </div>
+
+    <!-- ═══ SKILLS LEGEND ═══ -->
+    <div class="dim">
+      <span class="dim-tick"></span>
+      <span class="dim-label">Skills</span>
+      <span class="dim-line"></span>
+    </div>
+
+    <div class="legend">
+      <div class="legend-row">
+        <div class="legend-key"><span class="legend-symbol"></span>Frontend</div>
+        <div class="legend-items">
+          <span class="legend-item">React.js</span>
+          <span class="legend-item">JavaScript</span>
+          <span class="legend-item">TypeScript</span>
+          <span class="legend-item">Tailwind CSS</span>
+        </div>
+      </div>
+      <div class="legend-row">
+        <div class="legend-key"><span class="legend-symbol circle"></span>Backend &amp; Systems</div>
+        <div class="legend-items">
+          <span class="legend-item">Laravel</span>
+          <span class="legend-item">PHP</span>
+          <span class="legend-item">REST API</span>
+          <span class="legend-item">OAuth 2.0 / SSO</span>
+          <span class="legend-item">Tauri</span>
+          <span class="legend-item">Rust</span>
+        </div>
+      </div>
+      <div class="legend-row">
+        <div class="legend-key"><span class="legend-symbol tri"></span>Data &amp; AI</div>
+        <div class="legend-items">
+          <span class="legend-item">Python</span>
+          <span class="legend-item">PostgreSQL</span>
+          <span class="legend-item">SQLite</span>
+          <span class="legend-item">Machine Learning</span>
+          <span class="legend-item">Deep Learning</span>
+        </div>
+      </div>
+      <div class="legend-row">
+        <div class="legend-key"><span class="legend-symbol diamond"></span>Tools &amp; Soft Skills</div>
+        <div class="legend-items">
+          <span class="legend-item">Git</span>
+          <span class="legend-item">Figma</span>
+          <span class="legend-item">Leadership</span>
+          <span class="legend-item">Manajemen Proyek</span>
+          <span class="legend-item">Problem Solving</span>
+          <span class="legend-item">Mediation</span>
+          <span class="legend-item">Conflict Management</span>
+          <span class="legend-item">Conflict Resolution</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ TITLE BLOCK ═══ -->
+    <div class="titleblock">
+      <div class="tb-cell">
+        <div class="tb-label">DRAWN BY</div>
+        <div class="tb-value">Alief Fathur Rahman</div>
+      </div>
+      <div class="tb-cell">
+        <div class="tb-label">CONTACT</div>
+        <div class="tb-value"><a href="mailto:alieffathur123@gmail.com">Email</a> · <a href="https://www.linkedin.com/in/alief-fathur-rahman-/" target="_blank">LinkedIn</a></div>
+      </div>
+      <div class="tb-cell">
+        <div class="tb-label">STATUS</div>
+        <div class="tb-value">Open to work</div>
+      </div>
+      <div class="tb-cell">
+        <div class="tb-label">SHEET / REV</div>
+        <div class="tb-value">1 of 1 · 2026</div>
+      </div>
+    </div>
+    <div class="sheet-footer-note">· end of sheet ·</div>
+
   </div>
-
-  <!-- ═══ SKILLS ═══ -->
-  <div class="section-divider">
-    <span class="section-label">Skills</span>
-    <div class="divider-line"></div>
-  </div>
-
-  <div class="skills-grid">
-    <div class="skill-block">
-      <div class="skill-block-title">Frontend</div>
-      <div class="skill-items">
-        <span class="skill-item">React.js</span>
-        <span class="skill-item">JavaScript</span>
-        <span class="skill-item">HTML/CSS</span>
-        <span class="skill-item">Tailwind CSS</span>
-      </div>
-    </div>
-    <div class="skill-block">
-      <div class="skill-block-title">Backend</div>
-      <div class="skill-items">
-        <span class="skill-item">Laravel</span>
-        <span class="skill-item">PHP</span>
-        <span class="skill-item">REST API</span>
-        <span class="skill-item">OAuth 2.0</span>
-        <span class="skill-item">SSO</span>
-      </div>
-    </div>
-    <div class="skill-block">
-      <div class="skill-block-title">Data & ML</div>
-      <div class="skill-items">
-        <span class="skill-item">Machine Learning</span>
-        <span class="skill-item">Python</span>
-        <span class="skill-item">MySQL</span>
-        <span class="skill-item">UML</span>
-      </div>
-    </div>
-    <div class="skill-block">
-      <div class="skill-block-title">Tools & Soft Skills</div>
-      <div class="skill-items">
-        <span class="skill-item">Figma</span>
-        <span class="skill-item">VS Code</span>
-        <span class="skill-item">Leadership</span>
-        <span class="skill-item">Team Mgmt</span>
-        <span class="skill-item">Problem Solving</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ FOOTER ═══ -->
-  <footer>
-    <div class="footer-name">Alief Fathur Rahman</div>
-    <div class="footer-note">Open to opportunities · 2025</div>
-  </footer>
-
 </div>
-
-<script>
-  // Intersection Observer for scroll animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.animationPlayState = 'running';
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.card, .project-card, .skill-block, .section-divider, footer').forEach(el => {
-    el.style.animationPlayState = 'paused';
-    observer.observe(el);
-  });
-
-  // Subtle mouse parallax on blobs
-  document.addEventListener('mousemove', (e) => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 30;
-    const y = (e.clientY / window.innerHeight - 0.5) * 30;
-    document.querySelector('.blob-1').style.transform = `translate(${x}px, ${y}px)`;
-    document.querySelector('.blob-2').style.transform = `translate(${-x}px, ${-y}px)`;
-  });
-</script>
 
 </body>
 </html>
